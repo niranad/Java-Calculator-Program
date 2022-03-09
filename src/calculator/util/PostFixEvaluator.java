@@ -80,13 +80,13 @@ public class PostFixEvaluator {
 				return y.divide(x, RoundingMode.UNNECESSARY);
 			} catch (ArithmeticException e) {
 				BigDecimal result = y.divide(x, RoundingMode.HALF_UP);
-				MathContext mc = new MathContext(result.precision(),
+				MathContext mc = new MathContext(result.precision() - result.scale() + 11,
 					RoundingMode.HALF_UP);
 				return y.divide(x, mc);
 			}
 		case '^':
 			try {
-				return y.pow((int) x.floatValue(), MathContext.DECIMAL128);
+				return y.pow((int) x.floatValue(), MathContext.UNLIMITED);
 			} catch (ArithmeticException e) {
 				System.err.printf("%nError: value too large");
 			}

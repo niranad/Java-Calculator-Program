@@ -9,16 +9,27 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * Java How To Program, 9th ed., Ex. 22.12
+ * Reads an infix expression from user keyboard input and converts it to a
+ * postfix expression. This {@code class} formats the expression for processing
+ * and uses regular expression to validate the input infix. If valid, the infix
+ * is converted to the corresponding postfix. An error message is generated if
+ * the input infix is invalid. A custom {@link Stack} is used for the
+ * conversion.
+ * 
+ * @author Adeniran J. Olukanni
  */
-public class InfixToPostFix {
+public class InfixToPostfix {
 	final StringBuffer postFix;
 
-	public InfixToPostFix() {
-		postFix = convertToPostFix(getInfix());
+	/**
+	 * Constructs an {@code InfixToPostFix} object that reads an infix expression
+	 * from the user at the keyboard and converts it to a postfix expression.
+	 */
+	public InfixToPostfix() {
+		postFix = convertToPostfix(getInfix());
 	}
 
-	public static StringBuffer getInfix() {
+	private static StringBuffer getInfix() {
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Enter an expression: ");
 		StringBuffer infix = new StringBuffer(
@@ -31,8 +42,9 @@ public class InfixToPostFix {
 		return infix;
 	}
 
-	public static StringBuffer convertToPostFix(StringBuffer infix) {
-		Pattern operatorsPat = Pattern.compile("\\(|\\)|\\d+(\\.\\d+)?|\\*|\\+|\\/|\\%|\\-|\\^");
+	private static StringBuffer convertToPostfix(StringBuffer infix) {
+		Pattern operatorsPat = Pattern
+			.compile("\\(|\\)|\\d+(\\.\\d+)?|\\*|\\+|\\/|\\%|\\-|\\^");
 		Matcher matcher = operatorsPat.matcher(infix);
 
 		Stack<String> infixStack = new Stack<>();
@@ -75,7 +87,7 @@ public class InfixToPostFix {
 
 			return postFix;
 		} else {
-			System.out.printf("%nInvalid Expression!!!%n");
+			System.err.printf("%nInvalid Expression!!!%n");
 			return null;
 		}
 	}

@@ -2,6 +2,13 @@ package calculator.util;
 
 import java.util.Iterator;
 
+/**
+ * A custom implementation of the {@linkplain java.util.Stack} data structure.
+ * 
+ * @author Adeniran J. Olukanni
+ *
+ * @param <T> input type argument
+ */
 public class Stack<T> implements Iterable<T> {
 	private StackNode<T> firstNode;
 	private StackNode<T> lastNode;
@@ -53,7 +60,7 @@ public class Stack<T> implements Iterable<T> {
 	public Iterator<T> iterator() {
 		return new Iterator<T>() {
 			StackNode<T> current = Stack.this.firstNode;
-			
+
 			@Override
 			public boolean hasNext() {
 				return current != null;
@@ -67,53 +74,53 @@ public class Stack<T> implements Iterable<T> {
 			}
 		};
 	}
-	
+
 	public boolean contains(T o) {
 		Iterator<T> iterator = this.iterator();
-		
+
 		while (iterator.hasNext()) {
 			if (iterator.next().equals(o)) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
 	public int size() {
 		if (isEmpty()) {
 			return 0;
-		} 
-		
+		}
+
 		StackNode<T> currNode = firstNode;
 		int i = 0;
-		
+
 		while (currNode != null) {
 			currNode = currNode.nextNode;
 			i++;
 		}
-		
+
 		return i;
 	}
 
 	public boolean isEmpty() {
 		return firstNode == null;
 	}
-	
+
 	public void clear() {
 		firstNode = lastNode = null;
 	}
-	
+
 	@Override
 	public String toString() {
 		StackNode<T> currNode = firstNode;
 		String s = "[";
-		
+
 		while (currNode != null) {
 			s += currNode.nextNode == null ? currNode.item + "]" : currNode.item + ", ";
 			currNode = currNode.nextNode;
 		}
-		
+
 		return isEmpty() ? "[]" : s;
 	}
 

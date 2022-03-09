@@ -1,7 +1,7 @@
 package calculator.app;
 
-import calculator.util.InfixToPostFix;
-import calculator.util.PostFixEvaluator;
+import calculator.util.InfixToPostfix;
+import calculator.util.PostfixEvaluator;
 
 public class Calculator {
 
@@ -10,9 +10,9 @@ public class Calculator {
 			+ "Signs%n+ (add)%n- (subtract)%n* (multiply)%n^ (power)%n/ (divide)%n"
 			+ "%% (modulus)%n%n");
 
-		InfixToPostFix converter = new InfixToPostFix();
+		InfixToPostfix converter = new InfixToPostfix();
 
 		@SuppressWarnings("unused")
-		PostFixEvaluator evaluator = new PostFixEvaluator(converter);
+		PostfixEvaluator evaluator = new PostfixEvaluator(converter);
 	}
 }

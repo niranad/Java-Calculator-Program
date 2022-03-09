@@ -7,10 +7,29 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Iterator;
 
-public class PostFixEvaluator {
+/**
+ * Evaluates a postfix expression obtained from an {@link InfixToPostfix}
+ * object, format and output the result.
+ * 
+ * @author Adeniran J. Olukanni
+ *
+ */
+public class PostfixEvaluator {
+	/**
+	 * Result of the evaluation.
+	 */
 	private BigDecimal result;
 
-	public PostFixEvaluator(InfixToPostFix converter) {
+	/**
+	 * Constructs a {@code PostfixEvaluator} object that obtains a postfix
+	 * expression from an {@code InfixToPostfix} object, format and output the
+	 * result.
+	 * 
+	 * @param converter - an {@link InfixToPostfix} object
+	 * @exception {@linkplain NullPointerException} if the postfix obtained is null
+	 *                        due to an invalid infix expression read from the user.
+	 */
+	public PostfixEvaluator(InfixToPostfix converter) {
 		result = evaluate(converter.postFix);
 
 		System.out.printf("%nResult: %s", format(result));
@@ -29,7 +48,7 @@ public class PostFixEvaluator {
 	}
 
 	private BigDecimal evaluate(StringBuffer postFix) {
-	
+
 		Stack<StringBuffer> postFixStack = new Stack<>();
 		populateStack(postFixStack, postFix);
 
@@ -45,7 +64,7 @@ public class PostFixEvaluator {
 			if (next.compareTo(new StringBuffer(")")) != 0) {
 				if (next.toString().matches("\\d+(\\.\\d+)?")) {
 					stack.push(new BigDecimal(next.toString()));
-				} else if (InfixToPostFix.isOperator(next.toString())) {
+				} else if (InfixToPostfix.isOperator(next.toString())) {
 					x = stack.pop();
 					if (stack.isEmpty()) {
 						return x;

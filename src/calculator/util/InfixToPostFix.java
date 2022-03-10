@@ -16,32 +16,39 @@ import java.util.regex.Pattern;
  * @author Adeniran J. Olukanni
  */
 public class InfixToPostfix {
-	final StringBuffer postFix;
+	final StringBuffer postfix;
 
 	/**
 	 * Constructs an {@code InfixToPostFix} object that reads an infix expression
 	 * from the user at the keyboard and converts it to a postfix expression.
 	 */
 	public InfixToPostfix() {
-		postFix = convertToPostfix(getInfix());
+		postfix = convertToPostfix(getInfix());
 	}
 
 	private static StringBuffer getInfix() {
 		Scanner sc = new Scanner(System.in);
-		System.out.print("Enter an expression: ");
+		System.out.printf("%n%nEnter an expression to calculate or otherwise to quit: %n");
 		StringBuffer infix = new StringBuffer(
 			sc.nextLine().trim()
 				.replaceAll("\\s", "")
 				.replaceAll("(\\d+)(\\()", "$1*$2")
 				.replaceAll("(\\))(\\d+)", "$1*$2"));
-		sc.close();
-
+		
+		if (infix.toString().isBlank()) {
+			sc.close();
+		}
+		
 		return infix;
 	}
 
 	private static StringBuffer convertToPostfix(StringBuffer infix) {
+		if (infix.toString().isBlank()) {
+			return null;
+		}
+		
 		Pattern operatorsPat = Pattern
-			.compile("\\(|\\)|\\d+(\\.\\d+)?|\\*|\\+|\\/|\\%|\\-|\\^");
+			.compile("\\(|\\)|\\d+(\\.\\d+)?|[*+/%^-]");
 		Matcher matcher = operatorsPat.matcher(infix);
 
 		Stack<String> infixStack = new Stack<>();
@@ -84,14 +91,13 @@ public class InfixToPostfix {
 
 			return postFix;
 		} else {
-			System.err.printf("%nInvalid Expression!!!%n");
 			return null;
 		}
 	}
 
 	private static boolean isValidExpression(StringBuffer exp) {
 		Pattern wrongExpPat = Pattern.compile(
-			"[^\\d\\s\\+\\-\\/\\*\\(\\)\\%\\^\\.]+|(\\+{2})|(\\-{2})|(\\*{2})|(\\/{2})|(\\%{2})|(\\^{2})|(\\.{2})");
+			"[^\\d\\s+/*()%^.-]+|(\\+{2})|(\\-{2})|(\\*{2})|(\\/{2})|(\\%{2})|(\\^{2})|(\\.{2})");
 		Matcher invalidExpMatcher = wrongExpPat.matcher(exp);
 
 		String leftParens = exp.toString().replaceAll("[^\\(]", "");

@@ -15,6 +15,7 @@ import java.util.Iterator;
  *
  */
 public class PostfixEvaluator {
+	public final StringBuffer postfix;
 	/**
 	 * Result of the evaluation.
 	 */
@@ -30,9 +31,12 @@ public class PostfixEvaluator {
 	 *                        due to an invalid infix expression read from the user.
 	 */
 	public PostfixEvaluator(InfixToPostfix converter) {
-		result = evaluate(converter.postFix);
-
-		System.out.printf("%nResult: %s", format(result));
+		postfix = converter.postfix;
+		
+		if (postfix != null) {
+			result = evaluate(postfix);
+			System.out.printf("%nResult: %s", format(result));
+		}
 	}
 
 	private String format(BigDecimal d) {
@@ -48,9 +52,8 @@ public class PostfixEvaluator {
 	}
 
 	private BigDecimal evaluate(StringBuffer postFix) {
-
 		Stack<StringBuffer> postFixStack = new Stack<>();
-		populateStack(postFixStack, postFix);
+		pushPostfixToStack(postFixStack, postFix);
 
 		Iterator<StringBuffer> iterator = postFixStack.iterator();
 
@@ -78,7 +81,7 @@ public class PostfixEvaluator {
 		return stack.pop();
 	}
 
-	private void populateStack(Stack<StringBuffer> stack, StringBuffer postFix) {
+	private void pushPostfixToStack(Stack<StringBuffer> stack, StringBuffer postFix) {
 		String[] digitsAndOps = postFix.toString().split("\\s");
 
 		for (String digitOrOp : digitsAndOps) {

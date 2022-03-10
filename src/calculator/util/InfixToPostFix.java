@@ -1,12 +1,9 @@
 package calculator.util;
 
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * Reads an infix expression from user keyboard input and converts it to a
@@ -96,23 +93,14 @@ public class InfixToPostfix {
 		Pattern wrongExpPat = Pattern.compile(
 			"[^\\d\\s\\+\\-\\/\\*\\(\\)\\%\\^\\.]+|(\\+{2})|(\\-{2})|(\\*{2})|(\\/{2})|(\\%{2})|(\\^{2})|(\\.{2})");
 		Matcher invalidExpMatcher = wrongExpPat.matcher(exp);
-		wrongExpPat = Pattern.compile("\\(|\\)");
-		Matcher bracketsMatcher = wrongExpPat.matcher(exp);
+		
+		String leftParen = exp.toString().replaceAll("[^\\(]", "");
+		String rightParen = exp.toString().replaceAll("[^\\)]", "");
 
-		if (invalidExpMatcher.find()) {
+		if (invalidExpMatcher.find() || leftParen.length() != rightParen.length()) {
 			return false;
-		} else if (bracketsMatcher.find()) {
-			String brackets = exp.toString().replaceAll("[^\\(\\)]", "");
-			String[] bracketsArr = brackets.split("");
-			Map<String, Long> bracketsCount = Arrays.stream(bracketsArr)
-				.collect(Collectors.groupingBy(el -> el, Collectors.counting()));
-
-			if (bracketsCount.get("(") == bracketsCount.get(")")) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
+		}
+		else {
 			return true;
 		}
 	}

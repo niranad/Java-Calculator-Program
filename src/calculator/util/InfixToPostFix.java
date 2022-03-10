@@ -94,10 +94,10 @@ public class InfixToPostfix {
 			"[^\\d\\s\\+\\-\\/\\*\\(\\)\\%\\^\\.]+|(\\+{2})|(\\-{2})|(\\*{2})|(\\/{2})|(\\%{2})|(\\^{2})|(\\.{2})");
 		Matcher invalidExpMatcher = wrongExpPat.matcher(exp);
 		
-		String leftParen = exp.toString().replaceAll("[^\\(]", "");
-		String rightParen = exp.toString().replaceAll("[^\\)]", "");
+		String leftParens = exp.toString().replaceAll("[^\\(]", "");
+		String rightParens = exp.toString().replaceAll("[^\\)]", "");
 
-		if (invalidExpMatcher.find() || leftParen.length() != rightParen.length()) {
+		if (invalidExpMatcher.find() || leftParens.length() != rightParens.length()) {
 			return false;
 		}
 		else {

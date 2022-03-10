@@ -94,14 +94,14 @@ public class InfixToPostfix {
 
 	private static boolean isValidExpression(StringBuffer exp) {
 		Pattern wrongExpPat = Pattern.compile(
-			"[^0-9\\s\\+\\-\\/\\*\\(\\)\\%\\^\\.]+|(\\+{2,})|(\\-{2,})|(\\*{2,})|(\\/{2,})|(\\%{2,})|(\\^{2,})|(\\.{2,})");
+			"[^\\d\\s\\+\\-\\/\\*\\(\\)\\%\\^\\.]+|(\\+{2})|(\\-{2})|(\\*{2})|(\\/{2})|(\\%{2})|(\\^{2})|(\\.{2})");
 		Matcher invalidExpMatcher = wrongExpPat.matcher(exp);
 		wrongExpPat = Pattern.compile("\\(|\\)");
-		Matcher missingBracketMatcher = wrongExpPat.matcher(exp);
+		Matcher bracketsMatcher = wrongExpPat.matcher(exp);
 
 		if (invalidExpMatcher.find()) {
 			return false;
-		} else if (missingBracketMatcher.find()) {
+		} else if (bracketsMatcher.find()) {
 			String brackets = exp.toString().replaceAll("[^\\(\\)]", "");
 			String[] bracketsArr = brackets.split("");
 			Map<String, Long> bracketsCount = Arrays.stream(bracketsArr)

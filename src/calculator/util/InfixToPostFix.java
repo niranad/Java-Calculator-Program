@@ -93,14 +93,13 @@ public class InfixToPostfix {
 		Pattern wrongExpPat = Pattern.compile(
 			"[^\\d\\s\\+\\-\\/\\*\\(\\)\\%\\^\\.]+|(\\+{2})|(\\-{2})|(\\*{2})|(\\/{2})|(\\%{2})|(\\^{2})|(\\.{2})");
 		Matcher invalidExpMatcher = wrongExpPat.matcher(exp);
-		
+
 		String leftParens = exp.toString().replaceAll("[^\\(]", "");
 		String rightParens = exp.toString().replaceAll("[^\\)]", "");
 
 		if (invalidExpMatcher.find() || leftParens.length() != rightParens.length()) {
 			return false;
-		}
-		else {
+		} else {
 			return true;
 		}
 	}

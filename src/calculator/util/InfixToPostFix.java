@@ -28,25 +28,26 @@ public class InfixToPostfix {
 
 	private static StringBuffer getInfix() {
 		Scanner sc = new Scanner(System.in);
-		System.out.printf("%n%nEnter an expression to calculate or otherwise to quit: %n");
+		System.out
+			.printf("%n%nEnter an expression to calculate or otherwise to quit: %n");
 		StringBuffer infix = new StringBuffer(
 			sc.nextLine().trim()
 				.replaceAll("\\s", "")
 				.replaceAll("(\\d+)(\\()", "$1*$2")
 				.replaceAll("(\\))(\\d+)", "$1*$2"));
-		
+
 		if (infix.toString().isBlank()) {
 			sc.close();
 		}
-		
+
 		return infix;
 	}
 
 	private static StringBuffer convertToPostfix(StringBuffer infix) {
-		if (infix.toString().isBlank()) {
+		if (infix.toString().isBlank() || !isValidExpression(infix)) {
 			return null;
 		}
-		
+
 		Pattern operatorsPat = Pattern
 			.compile("\\(|\\)|\\d+(\\.\\d+)?|[*+/%^-]");
 		Matcher matcher = operatorsPat.matcher(infix);
@@ -57,42 +58,38 @@ public class InfixToPostfix {
 			infixStack.push(matcher.group());
 		}
 
-		if (isValidExpression(infix)) {
-			Stack<Character> stack = new Stack<>();
-			stack.push('(');
+		Stack<Character> stack = new Stack<>();
+		stack.push('(');
 
-			infixStack.push(")");
+		infixStack.push(")");
 
-			StringBuffer postFix = new StringBuffer();
+		StringBuffer postFix = new StringBuffer();
 
-			Iterator<String> iterator = infixStack.iterator();
+		Iterator<String> iterator = infixStack.iterator();
 
-			while (!stack.isEmpty()) {
-				String next = iterator.next();
-				if (next.toString().matches("\\d+(\\.\\d+)?")) {
-					postFix.append(next + " ");
-				} else if (Character.compare(next.charAt(0), '(') == 0) {
-					stack.push(next.charAt(0));
-				} else if (isOperator(next)) {
-					while (isOperator(String.valueOf(stack.peek()))
-						&& precedence(stack.peek()) >= precedence(next.charAt(0))) {
-						postFix.append(stack.pop() + " ");
-					}
-					stack.push(next.charAt(0));
-				} else if (Character.compare(next.charAt(0), ')') == 0) {
-					while (Character.compare(stack.peek(), '(') != 0) {
-						postFix.append(stack.pop() + " ");
-					}
-					stack.pop();
+		while (!stack.isEmpty()) {
+			String next = iterator.next();
+			if (next.toString().matches("\\d+(\\.\\d+)?")) {
+				postFix.append(next + " ");
+			} else if (Character.compare(next.charAt(0), '(') == 0) {
+				stack.push(next.charAt(0));
+			} else if (isOperator(next)) {
+				while (isOperator(String.valueOf(stack.peek()))
+					&& precedence(stack.peek()) >= precedence(next.charAt(0))) {
+					postFix.append(stack.pop() + " ");
 				}
+				stack.push(next.charAt(0));
+			} else if (Character.compare(next.charAt(0), ')') == 0) {
+				while (Character.compare(stack.peek(), '(') != 0) {
+					postFix.append(stack.pop() + " ");
+				}
+				stack.pop();
 			}
-
-			postFix.trimToSize();
-
-			return postFix;
-		} else {
-			return null;
 		}
+
+		postFix.trimToSize();
+
+		return postFix;
 	}
 
 	private static boolean isValidExpression(StringBuffer exp) {

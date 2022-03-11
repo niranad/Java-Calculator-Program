@@ -60,7 +60,6 @@ public class PostfixEvaluator {
 		postFixStack.push(new StringBuffer(")"));
 
 		Stack<BigDecimal> stack = new Stack<>();
-		BigDecimal x = BigDecimal.ZERO, y = BigDecimal.ZERO;
 
 		while (iterator.hasNext()) {
 			StringBuffer next = iterator.next();
@@ -68,11 +67,11 @@ public class PostfixEvaluator {
 				if (next.toString().matches("\\d+(\\.\\d+)?")) {
 					stack.push(new BigDecimal(next.toString()));
 				} else if (InfixToPostfix.isOperator(next.toString())) {
-					x = stack.pop();
+					BigDecimal x = stack.pop();
 					if (stack.isEmpty()) {
 						return x;
 					}
-					y = stack.pop();
+					BigDecimal y = stack.pop();
 					stack.push(calculate(y, next.charAt(0), x));
 				}
 			}

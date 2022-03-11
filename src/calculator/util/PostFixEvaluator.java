@@ -32,10 +32,11 @@ public class PostfixEvaluator {
 	 */
 	public PostfixEvaluator(InfixToPostfix converter) {
 		postfix = converter.postfix;
-		
+
 		if (postfix != null) {
 			result = evaluate(postfix);
-			System.out.printf("%nResult: %s", format(result));
+			System.out.printf("%nResult: %s",
+				result != null ? format(result) : "Error: incomplete expression");
 		}
 	}
 
@@ -51,27 +52,30 @@ public class PostfixEvaluator {
 		return formatter.format(d);
 	}
 
-	private BigDecimal evaluate(StringBuffer postFix) {
-		Stack<StringBuffer> postFixStack = new Stack<>();
-		pushPostfixToStack(postFixStack, postFix);
+	private BigDecimal evaluate(StringBuffer postfix) {
+		Stack<StringBuffer> postfixStack = new Stack<>();
+		pushPostfixToStack(postfixStack, postfix);
 
-		Iterator<StringBuffer> iterator = postFixStack.iterator();
+		Iterator<StringBuffer> iterator = postfixStack.iterator();
 
-		postFixStack.push(new StringBuffer(")"));
+		postfixStack.push(new StringBuffer(")"));
 
 		Stack<BigDecimal> stack = new Stack<>();
 
 		while (iterator.hasNext()) {
 			StringBuffer next = iterator.next();
-			if (next.compareTo(new StringBuffer(")")) != 0) {
+			if (!next.toString().equals(")")) {
 				if (next.toString().matches("\\d+(\\.\\d+)?")) {
 					stack.push(new BigDecimal(next.toString()));
-				} else if (InfixToPostfix.isOperator(next.toString())) {
+				} else {
 					BigDecimal x = stack.pop();
 					if (stack.isEmpty()) {
-						return x;
+						if (!next.toString().equals("-")
+							&& !next.toString().equals("+")) {
+							return null;
+						}
 					}
-					BigDecimal y = stack.pop();
+					BigDecimal y = !stack.isEmpty() ? stack.pop() : BigDecimal.ZERO;
 					stack.push(calculate(y, next.charAt(0), x));
 				}
 			}
